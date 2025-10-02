@@ -3,7 +3,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { ClockAlert, TriangleAlert, Zap } from "lucide-react";
 import { ReactElement } from "react";
-import EditTaskDialog from "./edit-task-dialog";
+
+import TaskOptionsMenu from "./task-options-menu";
 type PriorityType = "low" | "medium" | "high" | "critical";
 
 const priority: Record<
@@ -45,7 +46,7 @@ export default function TaskCard({
     <div className="p-3 bg-primary-foreground rounded-md shadow-sm">
       <div className="flex justify-between items-center">
         <span className="capitalize text-primary">{title}</span>
-        <EditTaskDialog />
+        <TaskOptionsMenu />
       </div>
       <div className="flex items-center gap-2 mt-2">
         <Checkbox className="size-5 border-accent-foreground" />

@@ -20,17 +20,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Dispatch, SetStateAction } from "react";
 
 type Props = {
   title: string;
   desc: string;
+  open: boolean;
+  onOpenChange: Dispatch<SetStateAction<boolean>>;
 };
 const formSchema = z.object({
   title: z.string(),
   desc: z.string(),
 });
 
-export default function EditTaskForm({ title, desc }: Props) {
+export default function EditTaskForm({
+  title,
+  desc,
+  onOpenChange,
+  open,
+}: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,41 +60,57 @@ export default function EditTaskForm({ title, desc }: Props) {
     console.log(values);
   }
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8"></form>
-      <div className="flex flex-col gap-3">
-        <CustomInputField
-          control={form.control}
-          name="title"
-          placeholder={title}
-          className="border p-2 rounded"
-        />
-        <FormField
-          control={form.control}
-          name="desc"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="capitalize">priority</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a verified email to display" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Edit Task</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <div className="flex flex-col gap-3">
+              <CustomInputField
+                control={form.control}
+                name="title"
+                placeholder={title}
+                className="border p-2 rounded"
+              />
+              <FormField
+                control={form.control}
+                name="desc"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">priority</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a verified email to display" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="m@example.com">
+                          m@example.com
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        {/* أزرار */}
-        <Button variant={"secondary"} className="capitalize cursor-pointer">
-          confirm
-        </Button>
-      </div>
-    </Form>
+              {/* أزرار */}
+              <Button
+                variant={"secondary"}
+                className="capitalize cursor-pointer"
+              >
+                confirm
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

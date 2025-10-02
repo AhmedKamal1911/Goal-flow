@@ -31,7 +31,7 @@ export default function AddGoalForm({
     resolver: zodResolver(createGoalSchema),
     defaultValues: {
       title: "",
-      color: "#000000",
+      color: "",
     },
   });
   console.log(form.getValues());

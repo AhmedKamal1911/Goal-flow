@@ -28,7 +28,7 @@ export async function createGoalAction(
     await prisma.goal.create({
       data: {
         name: result.data.title,
-        color: result.data.color ?? "#082F48",
+        color: result.data.color ?? "#163276",
       },
     });
     revalidateTag(PRISMA_CACHE_KEY.GOALS);

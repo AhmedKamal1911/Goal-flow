@@ -1,8 +1,10 @@
 import { useShades } from "@/hooks/useShades";
-import AddTaskDialog from "../task/add-task-dialog";
+
 import TaskCard from "../task/task-card";
 import { GoalWithTasks } from "@/lib/types/goal";
 import { getContrastColor } from "@/lib/utils";
+
+import GoalOptionsMenu from "./goal-options-menu";
 
 export default function GoalColumn({ goalInfo }: { goalInfo: GoalWithTasks }) {
   const { lighter, darker } = useShades(goalInfo.color || "#3498db");
@@ -13,23 +15,21 @@ export default function GoalColumn({ goalInfo }: { goalInfo: GoalWithTasks }) {
       style={{
         background: `linear-gradient(55deg, ${lighter}, ${darker})`,
       }}
-      className="p-4 rounded-2xl shadow-md text-white 
-                 backdrop-blur-sm bg-opacity-90
-                 border border-white/20 
+      className="p-2.5 sm:p-4 rounded-2xl shadow-md 
                  transition-all duration-300 
                  hover:shadow-xl hover:scale-[1.02] hover:brightness-105"
     >
       <div className="flex flex-col gap-2 mb-4">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between gap-4 items-center">
           <span
             style={{
               color: textColor,
             }}
-            className="capitalize text-lg font-semibold tracking-wide"
+            className="capitalize text-lg font-semibold max-w-[250px]  line-clamp-1 sm:line-clamp-2 overflow-hidden tracking-wide"
           >
             {goalInfo.name}
           </span>
-          <AddTaskDialog />
+          <GoalOptionsMenu />
         </div>
 
         <span style={{ color: textColor }} className="text-base font-semibold">
@@ -42,9 +42,6 @@ export default function GoalColumn({ goalInfo }: { goalInfo: GoalWithTasks }) {
           </span>
         </span>
       </div>
-
-      <div className="border-t border-white/20 my-2" />
-
       <div className="flex flex-col gap-3">
         {Array.from({ length: 5 }).map((task, i) => (
           <TaskCard key={i} level="medium" title="test" />

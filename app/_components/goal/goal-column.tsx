@@ -46,7 +46,7 @@ export default async function GoalColumn({
           </span>
         </span>
       </div>
-      <GoalTasks tasks={goalInfo.tasks} />
+      <GoalTasks tasks={goalInfo.tasks} priorities={priorities} />
     </div>
   );
 }

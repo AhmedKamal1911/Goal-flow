@@ -3,16 +3,23 @@
 import { useState, useRef, useEffect } from "react";
 import { TaskWithPriority } from "@/lib/types/task";
 import { Button } from "@/components/ui/button";
-import TaskCard from "../task/task-card";
 
-export default function GoalTasks({ tasks }: { tasks: TaskWithPriority[] }) {
+import { Priority } from "@prisma/client";
+import { TaskCard } from "../task/task-card";
+
+export default function GoalTasks({
+  tasks,
+  priorities,
+}: {
+  tasks: TaskWithPriority[];
+  priorities: Priority[];
+}) {
   const [showAll, setShowAll] = useState(false);
-  const [collapsedHeight, setCollapsedHeight] = useState<number>(315); // ارتفاع افتراضي صغير
+  const [collapsedHeight, setCollapsedHeight] = useState<number>(315);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const visibleCount = 3;
 
-  // حساب ارتفاع أول 3 كروت
   useEffect(() => {
     if (containerRef.current && tasks.length > 0) {
       const children = Array.from(
@@ -67,15 +74,15 @@ export default function GoalTasks({ tasks }: { tasks: TaskWithPriority[] }) {
           }}
         >
           {tasks.map((task) => (
-            <TaskCard key={task.id} taskInfo={task} />
+            <TaskCard key={task.id} priorities={priorities} taskInfo={task} />
           ))}
 
           {!showAll && tasks.length > visibleCount && (
             <div
-              className="absolute bottom-0 left-0 right-0 h-16 rounded-b-md"
+              className="absolute bottom-0 left-0 right-0 h-20 rounded-b-md"
               style={{
                 background:
-                  "linear-gradient(to top, rgba(0,0,0,0.9), transparent)",
+                  "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
               }}
             />
           )}
@@ -86,7 +93,7 @@ export default function GoalTasks({ tasks }: { tasks: TaskWithPriority[] }) {
         <Button
           variant="secondary"
           onClick={handleToggle}
-          className="self-center rounded-full shadow-2xl border-1 mt-1"
+          className="self-center rounded-full shadow-2xl border-1 mt-1 cursor-pointer"
         >
           {showAll
             ? "Show less ▲"

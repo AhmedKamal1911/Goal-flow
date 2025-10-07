@@ -1,10 +1,9 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
-
 
 export function getContrastColor(hex: string): string {
   // Remove #
@@ -21,7 +20,6 @@ export function getContrastColor(hex: string): string {
   return brightness > 128 ? "#000000" : "#FFFFFF"; // لو فاتح رجّع أسود، لو غامق رجّع أبيض
 }
 
-
 // دالة لتوليد لون أغمق أو أفتح من HEX
 export function shadeColor(hex: string, percent: number) {
   let r = parseInt(hex.slice(1, 3), 16);
@@ -35,4 +33,12 @@ export function shadeColor(hex: string, percent: number) {
   return `#${[r, g, b]
     .map((x) => Math.round(x).toString(16).padStart(2, "0"))
     .join("")}`;
+}
+
+export function getShades(color: string) {
+  const base = color || "#3498db";
+  const lighter = shadeColor(base, 20);
+  const darker = shadeColor(base, -20);
+
+  return { base, lighter, darker };
 }

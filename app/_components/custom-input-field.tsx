@@ -33,7 +33,7 @@ export default function CustomInputField<
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="capitalize">{field.name}</FormLabel>
+          <FormLabel className="capitalize w-fit">{field.name}</FormLabel>
           <FormControl>
             <CustomInput
               className={cn("bg-white", className)}

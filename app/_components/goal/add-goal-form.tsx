@@ -15,11 +15,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  createGoalSchema,
+  goalSchema,
   GoalSchemaInputs,
 } from "@/lib/validation/goal/create-goal-schema";
 import { Dispatch, SetStateAction, useTransition } from "react";
 import { createGoalAction } from "@/lib/server/actions/goal/create-goal-action";
+import { toast } from "sonner";
 
 export default function AddGoalForm({
   setOpenModal,
@@ -28,7 +29,7 @@ export default function AddGoalForm({
 }) {
   const [isPending, startTransition] = useTransition();
   const form = useForm<GoalSchemaInputs>({
-    resolver: zodResolver(createGoalSchema),
+    resolver: zodResolver(goalSchema),
     defaultValues: {
       title: "",
       color: "",
@@ -38,10 +39,19 @@ export default function AddGoalForm({
 
   function onSubmit(values: GoalSchemaInputs) {
     startTransition(async () => {
-      const actionRes = await createGoalAction(values);
-      if (actionRes.status === "success") {
-        console.log("success", actionRes.message);
-        setOpenModal(false);
+      try {
+        const actionRes = await createGoalAction(values);
+
+        if (actionRes.status === "success") {
+          console.log("success", actionRes.message);
+          setOpenModal(false);
+          toast.success(actionRes.message);
+        } else {
+          toast.error(actionRes.error.statusText);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("A network error occurred!");
       }
     });
   }

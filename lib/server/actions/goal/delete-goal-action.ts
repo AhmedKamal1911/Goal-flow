@@ -1,39 +1,33 @@
 "use server";
 
 import { ActionResponse } from "@/lib/types/shared";
-import {
-  goalSchema,
-  GoalSchemaInputs,
-} from "@/lib/validation/goal/create-goal-schema";
 import prisma from "@/prisma";
 import { Prisma } from "@prisma/client";
+
+import { getGoalById } from "../../queries";
 import { revalidatePath } from "next/cache";
 
-export async function createGoalAction(
-  inputs: GoalSchemaInputs
-): ActionResponse {
-  const result = goalSchema.safeParse(inputs);
-  if (!result.success) {
-    return {
-      status: "validationError",
-      error: {
-        statusCode: 400,
-        statusText: "invalid inputs",
-      },
-    };
-  }
-
+export async function deleteGoalAction(id: string): ActionResponse {
   try {
-    await prisma.goal.create({
-      data: {
-        name: result.data.title,
-        color: result.data.color ?? "#163276",
+    const goalExist = await getGoalById(id);
+    if (!goalExist) {
+      return {
+        status: "error",
+        error: {
+          statusCode: 404,
+          statusText: "Goal not found",
+        },
+      };
+    }
+    await prisma.goal.delete({
+      where: {
+        id,
       },
     });
     revalidatePath("/");
     return {
       status: "success",
-      message: "Goal Created Successfully.",
+      message: "Goal Deleted Successfully.",
     };
   } catch (error) {
     console.error(error);
@@ -56,7 +50,7 @@ export async function createGoalAction(
       status: "error",
       error: {
         statusCode: 500,
-        statusText: "Something went wrong while saving your goal.",
+        statusText: "Something went wrong while deleting your goal.",
       },
     };
   }

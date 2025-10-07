@@ -1,18 +1,20 @@
 "use server";
 
 import { ActionResponse } from "@/lib/types/shared";
-import {
-  goalSchema,
-  GoalSchemaInputs,
-} from "@/lib/validation/goal/create-goal-schema";
+import { TaskInputs, taskSchema } from "@/lib/validation/task/task";
+
 import prisma from "@/prisma";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-export async function createGoalAction(
-  inputs: GoalSchemaInputs
-): ActionResponse {
-  const result = goalSchema.safeParse(inputs);
+export async function createTaskAction({
+  inputs,
+  goalId,
+}: {
+  inputs: TaskInputs;
+  goalId: string;
+}): ActionResponse {
+  const result = taskSchema.safeParse(inputs);
   if (!result.success) {
     return {
       status: "validationError",
@@ -24,16 +26,19 @@ export async function createGoalAction(
   }
 
   try {
-    await prisma.goal.create({
+    await prisma.task.create({
       data: {
         name: result.data.title,
-        color: result.data.color ?? "#163276",
+        desc: result.data.desc ?? "",
+        priorityId: result.data.priorityId,
+        goalId,
       },
     });
+    console.log("created tasl");
     revalidatePath("/");
     return {
       status: "success",
-      message: "Goal Created Successfully.",
+      message: "Task Added Successfully.",
     };
   } catch (error) {
     console.error(error);
@@ -56,7 +61,7 @@ export async function createGoalAction(
       status: "error",
       error: {
         statusCode: 500,
-        statusText: "Something went wrong while saving your goal.",
+        statusText: "Something went wrong while adding your task.",
       },
     };
   }

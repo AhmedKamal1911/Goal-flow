@@ -1,21 +1,25 @@
-import { useShades } from "@/hooks/useShades";
-
-import TaskCard from "../task/task-card";
 import { GoalWithTasks } from "@/lib/types/goal";
-import { getContrastColor } from "@/lib/utils";
+import { getContrastColor, getShades } from "@/lib/utils";
 
 import GoalOptionsMenu from "./goal-options-menu";
+import { getAllPriorities } from "@/lib/server/queries";
+import GoalTasks from "./goal-tasks";
 
-export default function GoalColumn({ goalInfo }: { goalInfo: GoalWithTasks }) {
-  const { lighter, darker } = useShades(goalInfo.color || "#3498db");
+export default async function GoalColumn({
+  goalInfo,
+}: {
+  goalInfo: GoalWithTasks;
+}) {
+  const { lighter, darker } = getShades(goalInfo.color || "#3498db");
   const textColor = getContrastColor(goalInfo.color || "#3498db");
-
+  const priorities = await getAllPriorities();
+  console.log({ tasks: goalInfo.tasks });
   return (
     <div
       style={{
         background: `linear-gradient(55deg, ${lighter}, ${darker})`,
       }}
-      className="p-2.5 sm:p-4 rounded-2xl shadow-md 
+      className="p-2 sm:p-3 rounded-xl shadow-md 
                  transition-all duration-300 
                  hover:shadow-xl hover:scale-[1.02] hover:brightness-105"
     >
@@ -29,7 +33,7 @@ export default function GoalColumn({ goalInfo }: { goalInfo: GoalWithTasks }) {
           >
             {goalInfo.name}
           </span>
-          <GoalOptionsMenu />
+          <GoalOptionsMenu priorities={priorities} goalInfo={goalInfo} />
         </div>
 
         <span style={{ color: textColor }} className="text-base font-semibold">
@@ -42,11 +46,7 @@ export default function GoalColumn({ goalInfo }: { goalInfo: GoalWithTasks }) {
           </span>
         </span>
       </div>
-      <div className="flex flex-col gap-3">
-        {Array.from({ length: 5 }).map((task, i) => (
-          <TaskCard key={i} level="medium" title="test" />
-        ))}
-      </div>
+      <GoalTasks tasks={goalInfo.tasks} />
     </div>
   );
 }

@@ -52,8 +52,9 @@ enum PriorityName {
 }
 
 model Priority {
-  id   String       @id @default(uuid())
-  name PriorityName @unique
-  icon String
-  Task Task[]
+  id    String       @id @default(uuid())
+  name  PriorityName
+  color String
+  icon  String
+  Task  Task[]
 }

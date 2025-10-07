@@ -25,7 +25,7 @@ export default function AddGoalDialog() {
           add goal
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="max-sm:py-6 max-sm:px-4">
         <DialogHeader>
           <DialogTitle className="capitalize">create goal</DialogTitle>
         </DialogHeader>

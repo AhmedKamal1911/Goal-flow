@@ -7,12 +7,17 @@ import {
 } from "@/lib/validation/goal/create-goal-schema";
 import prisma from "@/prisma";
 import { Prisma } from "@prisma/client";
+
+import { getGoalById } from "../../queries";
 import { revalidatePath } from "next/cache";
 
-export async function createGoalAction(
-  inputs: GoalSchemaInputs
+export async function editGoalAction(
+  inputs: GoalSchemaInputs & { goalId: string }
 ): ActionResponse {
-  const result = goalSchema.safeParse(inputs);
+  const result = goalSchema.safeParse({
+    title: inputs.title,
+    color: inputs.color,
+  });
   if (!result.success) {
     return {
       status: "validationError",
@@ -22,18 +27,42 @@ export async function createGoalAction(
       },
     };
   }
-
   try {
-    await prisma.goal.create({
+    const goalFromDb = await getGoalById(inputs.goalId);
+
+    if (!goalFromDb) {
+      return {
+        status: "error",
+        error: {
+          statusCode: 404,
+          statusText: "Goal not found after update.",
+        },
+      };
+    }
+
+    if (
+      goalFromDb.name === result.data.title &&
+      goalFromDb.color === result.data.color
+    ) {
+      return {
+        status: "success",
+        message: "Goal Updated Successfully.",
+      };
+    }
+
+    await prisma.goal.update({
+      where: {
+        id: goalFromDb.id,
+      },
       data: {
+        color: result.data.color,
         name: result.data.title,
-        color: result.data.color ?? "#163276",
       },
     });
     revalidatePath("/");
     return {
       status: "success",
-      message: "Goal Created Successfully.",
+      message: "Goal Updated Successfully.",
     };
   } catch (error) {
     console.error(error);
@@ -56,7 +85,7 @@ export async function createGoalAction(
       status: "error",
       error: {
         statusCode: 500,
-        statusText: "Something went wrong while saving your goal.",
+        statusText: "Something went wrong while saving your edits.",
       },
     };
   }

@@ -3,10 +3,11 @@ import prisma from "@/prisma";
 export async function getAllGoals() {
   try {
     const goals = await prisma.goal.findMany({
-      orderBy: { order: "asc" },
+      orderBy: { createdAt: "asc" },
       include: {
         tasks: {
           include: { priority: true },
+          orderBy: [{ status: "desc" }, { createdAt: "asc" }],
         },
       },
     });

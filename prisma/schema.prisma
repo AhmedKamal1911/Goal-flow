@@ -27,7 +27,7 @@ model Task {
   id         String     @id @default(uuid())
   name       String
   desc       String?
-  status     TaskStatus @default(Pending)
+  status     TaskStatus @default(InProgress)
   dueDate    DateTime?
   order      Int        @default(autoincrement())
   goalId     String
@@ -39,7 +39,6 @@ model Task {
 }
 
 enum TaskStatus {
-  Pending
   InProgress
   Done
 }

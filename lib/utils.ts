@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { TaskStatus } from "@prisma/client";
+import { TaskWithPriority } from "./types/task";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -41,4 +43,16 @@ export function getShades(color: string) {
   const darker = shadeColor(base, -20);
 
   return { base, lighter, darker };
+}
+
+export function getGoalProgress(tasks: TaskWithPriority[]) {
+  const totalTasks = tasks.length;
+  const completedTasksCount = tasks.filter(
+    (task) => task.status === "Done"
+  ).length;
+
+  const percentage =
+    totalTasks === 0 ? 0 : Math.round((completedTasksCount / totalTasks) * 100);
+
+  return percentage;
 }

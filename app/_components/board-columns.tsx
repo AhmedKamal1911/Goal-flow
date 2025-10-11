@@ -1,8 +1,11 @@
-import { getAllGoals } from "@/lib/server/queries";
 import GoalColumn from "./goal/goal-column";
+import { GoalWithTasks } from "@/lib/types/goal";
 
-export default async function BoardColumns() {
-  const goalsList = await getAllGoals();
+export default function BoardColumns({
+  goalsList,
+}: {
+  goalsList: GoalWithTasks[];
+}) {
   if (!goalsList.length) {
     return (
       <div className="flex items-center justify-center h-full text-muted-500">

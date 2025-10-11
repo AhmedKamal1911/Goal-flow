@@ -1,5 +1,5 @@
 import { GoalWithTasks } from "@/lib/types/goal";
-import { getContrastColor, getShades } from "@/lib/utils";
+import { getContrastColor, getGoalProgress, getShades } from "@/lib/utils";
 
 import GoalOptionsMenu from "./goal-options-menu";
 import { getAllPriorities } from "@/lib/server/queries";
@@ -13,6 +13,7 @@ export default async function GoalColumn({
   const { lighter, darker } = getShades(goalInfo.color || "#3498db");
   const textColor = getContrastColor(goalInfo.color || "#3498db");
   const priorities = await getAllPriorities();
+  const percentage = getGoalProgress(goalInfo.tasks);
   console.log({ tasks: goalInfo.tasks });
   return (
     <div
@@ -36,8 +37,11 @@ export default async function GoalColumn({
           <GoalOptionsMenu priorities={priorities} goalInfo={goalInfo} />
         </div>
 
-        <span style={{ color: textColor }} className="text-base font-semibold">
-          50%{" "}
+        <span
+          style={{ color: textColor }}
+          className="text-base font-semibold flex items-center gap-1"
+        >
+          {percentage}%
           <span
             style={{ color: textColor, opacity: 0.8 }}
             className="text-sm font-normal"

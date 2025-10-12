@@ -39,7 +39,7 @@ function GoalsProgress({ percentage }: { percentage: number }) {
         style={{ width: `${percentage}%` }}
       />
       <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-white">
-        {percentage}%
+        {percentage.toFixed(2)}%
       </span>
     </div>
   );

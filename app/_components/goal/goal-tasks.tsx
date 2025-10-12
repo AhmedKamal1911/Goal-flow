@@ -55,7 +55,10 @@ export default function GoalTasks({
   };
 
   return (
-    <div className="flex flex-col gap-2 relative">
+    <div
+      onPointerDown={(e) => e.stopPropagation()}
+      className="flex flex-col gap-2 relative"
+    >
       <div className="relative">
         <div
           ref={containerRef}

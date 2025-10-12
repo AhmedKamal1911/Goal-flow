@@ -9,6 +9,7 @@ import { checkTaskAction } from "@/lib/server/actions/task/check-task-action";
 
 import { LoaderCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export const TaskCard = memo(function TaskCard({
   taskInfo,
@@ -81,13 +82,21 @@ function TaskCheckForm({ taskInfo }: { taskInfo: TaskWithPriority }) {
     formData.append("taskId", taskInfo.id);
     formData.append("taskStatus", val ? "Done" : "InProgress");
 
-    startTransition(() => {
-      checkTaskAction(undefined, formData);
+    startTransition(async () => {
+      const response = await checkTaskAction(formData);
+      if (response.status === "success") {
+        toast.success(response.message);
+      } else {
+        toast.error(response.error.statusText);
+      }
     });
   };
 
   return (
-    <form className="flex items-center gap-2">
+    <form
+      onPointerDown={(e) => e.stopPropagation()}
+      className="flex items-center gap-2"
+    >
       {isPending ? (
         <LoaderCircle className="animate-spin text-green-500" />
       ) : (

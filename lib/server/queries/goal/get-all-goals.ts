@@ -3,15 +3,15 @@ import prisma from "@/prisma";
 export async function getAllGoals() {
   try {
     const goals = await prisma.goal.findMany({
-      orderBy: { createdAt: "asc" },
+      orderBy: { order: "asc" },
       include: {
         tasks: {
           include: { priority: true },
-          orderBy: [{ status: "desc" }, { createdAt: "asc" }],
+          orderBy: [{ status: "desc" }, { updatedAt: "desc" }],
         },
       },
     });
-
+    console.log({ goals });
     return goals;
   } catch (error) {
     console.error(error);

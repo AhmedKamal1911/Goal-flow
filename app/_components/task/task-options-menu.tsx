@@ -42,6 +42,7 @@ export default function TaskOptionsMenu({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
+          onPointerDown={(e) => e.stopPropagation()}
           className="min-w-[160px] rounded-md shadow-md border border-gray-200 p-1"
           align="end"
         >

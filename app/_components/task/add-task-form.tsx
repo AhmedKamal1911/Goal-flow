@@ -36,7 +36,6 @@ import { Priority } from "@prisma/client";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { createTaskAction } from "@/lib/server/actions/task/create-task-action";
-import { SelectPortal } from "@radix-ui/react-select";
 
 export default function AddTaskForm({
   priorities,

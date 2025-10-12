@@ -7,10 +7,7 @@ import { Prisma, TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 
-export async function checkTaskAction(
-  _: unknown,
-  formData: FormData
-): Promise<ActionResponse> {
+export async function checkTaskAction(formData: FormData): ActionResponse {
   const taskId = formData.get("taskId");
   const taskStatus = formData.get("taskStatus");
   console.log({ taskId, taskStatus });
@@ -20,7 +17,6 @@ export async function checkTaskAction(
       taskStatus: z.enum(Object.values(TaskStatus)),
     })
     .safeParse({ taskId, taskStatus });
-
   if (!result.success) {
     return {
       status: "validationError",

@@ -1,18 +1,22 @@
+"use client";
 import { GoalWithTasks } from "@/lib/types/goal";
 import { getContrastColor, getGoalProgress, getShades } from "@/lib/utils";
 
 import GoalOptionsMenu from "./goal-options-menu";
-import { getAllPriorities } from "@/lib/server/queries";
-import GoalTasks from "./goal-tasks";
 
-export default async function GoalColumn({
+import GoalTasks from "./goal-tasks";
+import { Priority } from "@prisma/client";
+
+export default function GoalColumn({
   goalInfo,
+  priorities,
 }: {
   goalInfo: GoalWithTasks;
+  priorities: Priority[];
 }) {
   const { lighter, darker } = getShades(goalInfo.color || "#3498db");
   const textColor = getContrastColor(goalInfo.color || "#3498db");
-  const priorities = await getAllPriorities();
+
   const percentage = getGoalProgress(goalInfo.tasks);
   console.log({ tasks: goalInfo.tasks });
   return (
@@ -21,8 +25,7 @@ export default async function GoalColumn({
         background: `linear-gradient(55deg, ${lighter}, ${darker})`,
       }}
       className="p-2 sm:p-3 rounded-xl shadow-md 
-                 transition-all duration-300 
-                 hover:shadow-xl hover:scale-[1.02] hover:brightness-105"
+"
     >
       <div className="flex flex-col gap-2 mb-4">
         <div className="flex justify-between gap-4 items-center">

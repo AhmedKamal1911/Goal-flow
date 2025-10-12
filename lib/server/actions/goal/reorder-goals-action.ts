@@ -1,40 +1,45 @@
 "use server";
-
 import { ActionResponse } from "@/lib/types/shared";
-import {
-  goalSchema,
-  GoalSchemaInputs,
-} from "@/lib/validation/goal/create-goal-schema";
 import prisma from "@/prisma";
 import { Prisma } from "@prisma/client";
+
 import { revalidatePath } from "next/cache";
 
-export async function createGoalAction(
-  inputs: GoalSchemaInputs
-): ActionResponse {
-  const result = goalSchema.safeParse(inputs);
+import z from "zod";
+type Order = {
+  id: string;
+  order: number;
+};
+
+const schema = z.array(
+  z.object({
+    id: z.string(),
+    order: z.number(),
+  })
+);
+export async function reorderGoalsAction(newOrders: Order[]): ActionResponse {
+  const result = schema.safeParse(newOrders);
   if (!result.success) {
     return {
       status: "validationError",
       error: {
         statusCode: 400,
-        statusText: "invalid inputs",
+        statusText: "Validation failed",
       },
     };
   }
-
+  const parsedOrders = result.data;
   try {
-    await prisma.goal.create({
-      data: {
-        name: result.data.title,
-        color: result.data.color ?? "#163276",
-      },
-    });
+    const updatePromises = parsedOrders.map(({ id, order }) =>
+      prisma.goal.update({
+        where: { id },
+        data: { order },
+      })
+    );
+    await Promise.all(updatePromises);
+
     revalidatePath("/");
-    return {
-      status: "success",
-      message: "Goal Created Successfully.",
-    };
+    return { status: "success", message: "Order Updated" };
   } catch (error) {
     console.error(error);
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -56,7 +61,7 @@ export async function createGoalAction(
       status: "error",
       error: {
         statusCode: 500,
-        statusText: "Something went wrong while creating your goal.",
+        statusText: "Something went wrong while Ordering your Goals.",
       },
     };
   }

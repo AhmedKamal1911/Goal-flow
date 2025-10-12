@@ -38,7 +38,7 @@ export default function GoalOptionsMenu({ goalInfo, priorities }: Props) {
         <DropdownMenuTrigger className="cursor-pointer p-1 bg-primary text-white rounded transition">
           <Settings />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent onPointerDown={(e) => e.stopPropagation()}>
           <DropdownMenuLabel className="capitalize p-1 text-center">
             goal options
           </DropdownMenuLabel>

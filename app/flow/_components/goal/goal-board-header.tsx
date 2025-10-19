@@ -10,7 +10,7 @@ export default function GoalBoardHeader({
   return (
     <div className="flex flex-col gap-10">
       <div className="flex justify-between max-sm:flex-col max-sm:gap-6">
-        <h2 className="text-xl sm:text-3xl font-bold capitalize">
+        <h2 className="text-xl md:text-2xl font-bold capitalize">
           goal planning dashboard
         </h2>
         <HeaderActions />

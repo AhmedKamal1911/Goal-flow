@@ -14,11 +14,12 @@ import {
 import {
   SortableContext,
   arrayMove,
-  verticalListSortingStrategy,
+  rectSortingStrategy,
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { toast } from "sonner";
+import clsx from "clsx";
 
 import GoalColumn from "./goal/goal-column";
 import { GoalWithTasks } from "@/lib/types/goal";
@@ -26,7 +27,6 @@ import { Priority } from "@prisma/client";
 import { reorderGoalsAction } from "@/lib/server/actions/goal/reorder-goals-action";
 import { TaskWithPriority } from "@/lib/types/task";
 import { TaskCard } from "./task/task-card";
-import clsx from "clsx";
 
 export default function BoardColumns({
   goalsList,
@@ -45,6 +45,7 @@ export default function BoardColumns({
   useEffect(() => {
     setGoals(goalsList);
   }, [goalsList]);
+
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
     const type = active.data.current?.type;
@@ -134,10 +135,10 @@ export default function BoardColumns({
     >
       <SortableContext
         items={goals.map((g) => g.id)}
-        strategy={verticalListSortingStrategy}
+        strategy={rectSortingStrategy}
       >
         <div
-          className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 transition-opacity ${
+          className={`grid grid-cols-1 min-[996px]:grid-cols-2 xl:grid-cols-3 gap-4 transition-opacity ${
             isPending ? "opacity-60" : ""
           }`}
         >
@@ -153,11 +154,11 @@ export default function BoardColumns({
 
       <DragOverlay>
         {activeGoal ? (
-          <div className="scale-[1.03] shadow-2xl opacity-80 bg-white rounded-lg p-4">
+          <div className="grow-0 shadow-2xl opacity-85 bg-white rounded-xl p-4 transition-transform duration-200">
             <GoalColumn goalInfo={activeGoal} priorities={priorities} />
           </div>
         ) : activeTask ? (
-          <div className="shadow-lg opacity-50 bg-white rounded-md p-3 w-[250px]">
+          <div className="grow-0 shadow-lg opacity-70 bg-white rounded-md p-3 w-[250px] transition-transform duration-200">
             <TaskCard priorities={priorities} taskInfo={activeTask} />
           </div>
         ) : null}
@@ -193,20 +194,13 @@ function SortableGoal({
   };
 
   const goalClass = clsx(
-    // 🧱 Base styles
-    "rounded-2xl p-4 bg-gradient-to-br from-gray-50 to-white border border-gray-200",
-    "transition-transform transition-shadow transition-colors duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]",
-    "shadow-[0_2px_6px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:-translate-y-[3px]",
+    "rounded-2xl p-4 bg-gradient-to-br from-gray-50 to-white border border-gray-200 shadow-md transition-all duration-300 ease-out",
+    "hover:shadow-lg hover:-translate-y-[2px]",
     {
-      // 🟦 أثناء السحب (dragging)
-      "cursor-grabbing opacity-90 scale-[0.98] border border-primary/60 shadow-[0_8px_24px_rgba(0,0,0,0.15)] bg-gradient-to-br from-white via-primary/5 to-primary/10":
+      "cursor-grabbing opacity-90 scale-[0.99] border-primary/60 shadow-xl bg-gradient-to-br from-white via-primary/5 to-primary/10":
         isDragging,
-
-      // 🟥 الهدف اللي هيقع عليه العنصر (drop target)
-      "border-2 border-rose-500/60 bg-gradient-to-br from-rose-50 to-rose-100 shadow-inner scale-[1.01]":
+      "border-2 border-rose-400/60 bg-gradient-to-br from-rose-50 to-rose-100 scale-[1.01] shadow-inner":
         isOver && !isDragging,
-
-      // 🟨 الحالة العادية
       "cursor-grab": !isDragging,
     }
   );

@@ -11,7 +11,7 @@ export default async function Home() {
     goalsList.length;
 
   return (
-    <main className="relative  bg-[#E9ECF2] p-3 sm:p-5 flex min-h-screen overflow-hidden">
+    <main className="relative  bg-[#E9ECF2] p-3 lg:p-5 flex min-h-screen">
       <div className="flex flex-col gap-8 bg-primary-foreground p-3 sm:p-4 rounded-md flex-1">
         <GoalBoardHeader averageProgress={averageProgress} />
         <BoardColumns priorities={priorities} goalsList={goalsList} />

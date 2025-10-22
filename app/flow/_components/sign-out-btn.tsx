@@ -1,11 +1,12 @@
 "use client";
 
 import { useTransition } from "react";
-import { Button } from "@/components/ui/button";
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signOutAction } from "@/lib/server/actions/auth/sign-out-action";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { LogOut } from "lucide-react";
 
 export default function SignOutButton() {
   const [isPending, startTransition] = useTransition();
@@ -30,13 +31,13 @@ export default function SignOutButton() {
   };
 
   return (
-    <Button
+    <DropdownMenuItem
+      disabled={isPending}
       variant="destructive"
       onClick={handleSignOut}
-      disabled={isPending}
-      className="text-sm font-medium w-full"
     >
+      <LogOut />
       {isPending ? "Signing out..." : "Sign out"}
-    </Button>
+    </DropdownMenuItem>
   );
 }

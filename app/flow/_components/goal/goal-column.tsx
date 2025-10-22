@@ -6,8 +6,9 @@ import GoalOptionsMenu from "./goal-options-menu";
 
 import GoalTasks from "./goal-tasks";
 import { Priority } from "@prisma/client";
+import { memo } from "react";
 
-export default function GoalColumn({
+export const GoalColumn = memo(function GoalColumn({
   goalInfo,
   priorities,
 }: {
@@ -56,4 +57,4 @@ export default function GoalColumn({
       <GoalTasks tasks={goalInfo.tasks} priorities={priorities} />
     </div>
   );
-}
+});

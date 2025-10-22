@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { Settings2 } from "lucide-react";
 import AddGoalDialog from "./add-goal-dialog";
 
 export default function GoalBoardHeader({
@@ -13,20 +11,9 @@ export default function GoalBoardHeader({
         <h2 className="text-xl md:text-2xl font-bold capitalize">
           goal planning dashboard
         </h2>
-        <HeaderActions />
+        <AddGoalDialog />
       </div>
       <GoalsProgress percentage={averageProgress} />
-    </div>
-  );
-}
-
-function HeaderActions() {
-  return (
-    <div className="flex items-center gap-6">
-      <AddGoalDialog />
-      <Button variant={"outline"} className="cursor-pointer">
-        <Settings2 className="size-6" />
-      </Button>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use server";
 
+import { isPrismaError } from "@/lib/error-guards";
 import { ActionResponse } from "@/lib/types/shared";
 import {
   goalSchema,
@@ -30,14 +31,14 @@ export async function createGoalAction(
         color: result.data.color ?? "#163276",
       },
     });
-    revalidatePath("/");
+    revalidatePath("/flow");
     return {
       status: "success",
       message: "Goal Created Successfully.",
     };
   } catch (error) {
     console.error(error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (isPrismaError(error)) {
       console.error("Prisma error:", {
         code: error.code,
         meta: error.meta,

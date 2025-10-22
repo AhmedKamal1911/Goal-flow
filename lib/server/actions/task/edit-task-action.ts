@@ -7,6 +7,7 @@ import { Prisma } from "@prisma/client";
 import { getTaskById } from "../../queries";
 import { revalidatePath } from "next/cache";
 import { TaskInputs, taskSchema } from "@/lib/validation/task/task";
+import { isPrismaError } from "@/lib/error-guards";
 
 export async function editTaskAction({
   inputs,
@@ -59,14 +60,14 @@ export async function editTaskAction({
         priorityId: result.data.priorityId,
       },
     });
-    revalidatePath("/");
+    revalidatePath("/flow");
     return {
       status: "success",
       message: "Task Updated Successfully.",
     };
   } catch (error) {
     console.error(error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (isPrismaError(error)) {
       console.error("Prisma error:", {
         code: error.code,
         meta: error.meta,

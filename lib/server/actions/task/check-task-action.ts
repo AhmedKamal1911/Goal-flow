@@ -1,5 +1,6 @@
 "use server";
 
+import { isPrismaError } from "@/lib/error-guards";
 import { ActionResponse } from "@/lib/types/shared";
 
 import prisma from "@/prisma";
@@ -10,7 +11,7 @@ import z from "zod";
 export async function checkTaskAction(formData: FormData): ActionResponse {
   const taskId = formData.get("taskId");
   const taskStatus = formData.get("taskStatus");
-  console.log({ taskId, taskStatus });
+
   const result = z
     .object({
       taskId: z.string().min(1, { error: "task id is required" }),
@@ -32,14 +33,14 @@ export async function checkTaskAction(formData: FormData): ActionResponse {
       where: { id: result.data.taskId },
       data: { status: result.data.taskStatus },
     });
-    revalidatePath("/");
+    revalidatePath("/flow");
     return {
       status: "success",
       message: "Task status updated successfully.",
     };
   } catch (error) {
     console.error(error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (isPrismaError(error)) {
       console.error("Prisma error:", {
         code: error.code,
         meta: error.meta,

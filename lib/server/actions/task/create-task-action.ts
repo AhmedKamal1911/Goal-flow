@@ -1,5 +1,6 @@
 "use server";
 
+import { isPrismaError } from "@/lib/error-guards";
 import { ActionResponse } from "@/lib/types/shared";
 import { TaskInputs, taskSchema } from "@/lib/validation/task/task";
 
@@ -35,14 +36,14 @@ export async function createTaskAction({
       },
     });
     console.log("created tasl");
-    revalidatePath("/");
+    revalidatePath("/flow");
     return {
       status: "success",
       message: "Task Added Successfully.",
     };
   } catch (error) {
     console.error(error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (isPrismaError(error)) {
       console.error("Prisma error:", {
         code: error.code,
         meta: error.meta,

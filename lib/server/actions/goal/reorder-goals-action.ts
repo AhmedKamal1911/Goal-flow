@@ -1,4 +1,5 @@
 "use server";
+import { isPrismaError } from "@/lib/error-guards";
 import { ActionResponse } from "@/lib/types/shared";
 import prisma from "@/prisma";
 import { Prisma } from "@prisma/client";
@@ -38,11 +39,11 @@ export async function reorderGoalsAction(newOrders: Order[]): ActionResponse {
     );
     await Promise.all(updatePromises);
 
-    revalidatePath("/");
+    revalidatePath("/flow");
     return { status: "success", message: "Order Updated" };
   } catch (error) {
     console.error(error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (isPrismaError(error)) {
       console.error("Prisma error:", {
         code: error.code,
         meta: error.meta,

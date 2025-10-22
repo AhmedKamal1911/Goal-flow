@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 
 import { getTaskById } from "../../queries";
 import { revalidatePath } from "next/cache";
+import { isPrismaError } from "@/lib/error-guards";
 
 export async function deleteTaskAction(taskId: string): ActionResponse {
   try {
@@ -24,14 +25,14 @@ export async function deleteTaskAction(taskId: string): ActionResponse {
         id: taskId,
       },
     });
-    revalidatePath("/");
+    revalidatePath("/flow");
     return {
       status: "success",
       message: "task Deleted Successfully.",
     };
   } catch (error) {
     console.error(error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (isPrismaError(error)) {
       console.error("Prisma error:", {
         code: error.code,
         meta: error.meta,

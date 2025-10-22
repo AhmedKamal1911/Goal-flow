@@ -2,10 +2,16 @@ import { getAllGoals, getAllPriorities } from "@/lib/server/queries";
 import BoardColumns from "./_components/board-columns";
 import GoalBoardHeader from "./_components/goal/goal-board-header";
 import { getGoalProgress } from "@/lib/utils";
-export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Flow | Goal Flow",
+  description: "Access your Goal Flow.",
+};
 export default async function Home() {
-  const goalsList = await getAllGoals();
-  const priorities = await getAllPriorities();
+  const [goalsList, priorities] = await Promise.all([
+    getAllGoals(),
+    getAllPriorities(),
+  ]);
+
   const averageProgress =
     goalsList.reduce((sum, goal) => sum + getGoalProgress(goal.tasks), 0) /
     goalsList.length;

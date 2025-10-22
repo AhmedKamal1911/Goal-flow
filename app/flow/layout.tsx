@@ -11,7 +11,7 @@ export default function FlowLayout({ children }: Props) {
       <div className="flex w-full min-h-screen">
         <AppSidebar />
 
-        <main className="flex-1 flex flex-col">
+        <main className="flex-1 flex flex-col bg-accent">
           <header className="flex items-center justify-between px-4 py-3 border-b bg-white shadow-sm sticky top-0 z-20">
             <SidebarTrigger className="cursor-pointer" />
             <h1 className="text-lg font-semibold">Goal Flow</h1>

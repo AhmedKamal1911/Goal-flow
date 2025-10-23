@@ -2,7 +2,6 @@
 import { isPrismaError } from "@/lib/error-guards";
 import { ActionResponse } from "@/lib/types/shared";
 import prisma from "@/prisma";
-import { Prisma } from "@prisma/client";
 
 import { revalidatePath } from "next/cache";
 

@@ -4,7 +4,7 @@ import { isPrismaError } from "@/lib/error-guards";
 import { ActionResponse } from "@/lib/types/shared";
 
 import prisma from "@/prisma";
-import { Prisma, TaskStatus } from "@prisma/client";
+import { TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 

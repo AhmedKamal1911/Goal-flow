@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { TaskStatus } from "@prisma/client";
+
 import { TaskWithPriority } from "./types/task";
 
 export function cn(...inputs: ClassValue[]) {

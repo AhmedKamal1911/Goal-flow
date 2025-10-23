@@ -24,6 +24,7 @@ export default function SignOutButton() {
         }
 
         toast.error(res.error.statusText);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         toast.error("A network error occurred!");
       }

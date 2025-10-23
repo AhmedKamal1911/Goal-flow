@@ -37,6 +37,7 @@ export default function LoginForm() {
           type: "server",
           message: loginResponse.error.statusText,
         });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         toast.error("A network error occurred!");
       }

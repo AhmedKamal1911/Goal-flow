@@ -7,7 +7,6 @@ import {
   GoalSchemaInputs,
 } from "@/lib/validation/goal/create-goal-schema";
 import prisma from "@/prisma";
-import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export async function createGoalAction(

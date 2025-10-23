@@ -2,7 +2,6 @@
 
 import { ActionResponse } from "@/lib/types/shared";
 import prisma from "@/prisma";
-import { Prisma } from "@prisma/client";
 
 import { getTaskById } from "../../queries";
 import { revalidatePath } from "next/cache";

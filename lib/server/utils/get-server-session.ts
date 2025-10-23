@@ -9,6 +9,7 @@ export async function getServerSession() {
     if (!session) return null;
 
     return session;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return null;
   }

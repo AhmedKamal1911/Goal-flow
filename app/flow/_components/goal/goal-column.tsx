@@ -34,7 +34,7 @@ export const GoalColumn = memo(function GoalColumn({
             style={{
               color: textColor,
             }}
-            className="capitalize text-lg font-semibold max-w-[250px]  line-clamp-1 sm:line-clamp-2 overflow-hidden tracking-wide"
+            className="capitalize text-lg font-semibold max-w-[250px] text-ellipsis  line-clamp-1 sm:line-clamp-2 overflow-hidden tracking-wide"
           >
             {goalInfo.name}
           </span>

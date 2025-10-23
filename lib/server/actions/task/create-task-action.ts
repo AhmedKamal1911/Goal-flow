@@ -5,7 +5,6 @@ import { ActionResponse } from "@/lib/types/shared";
 import { TaskInputs, taskSchema } from "@/lib/validation/task/task";
 
 import prisma from "@/prisma";
-import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export async function createTaskAction({

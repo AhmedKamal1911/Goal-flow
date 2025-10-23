@@ -6,7 +6,6 @@ import {
   GoalSchemaInputs,
 } from "@/lib/validation/goal/create-goal-schema";
 import prisma from "@/prisma";
-import { Prisma } from "@prisma/client";
 
 import { getGoalById } from "../../queries";
 import { revalidatePath } from "next/cache";

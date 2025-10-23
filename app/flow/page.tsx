@@ -13,8 +13,10 @@ export default async function Home() {
   ]);
 
   const averageProgress =
-    goalsList.reduce((sum, goal) => sum + getGoalProgress(goal.tasks), 0) /
-    goalsList.length;
+    goalsList.length > 0
+      ? goalsList.reduce((sum, goal) => sum + getGoalProgress(goal.tasks), 0) /
+        goalsList.length
+      : 0;
 
   return (
     <main className="relative  bg-[#E9ECF2] p-3 lg:p-5 flex min-h-screen">

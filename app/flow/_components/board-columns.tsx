@@ -21,6 +21,8 @@ import { Priority } from "@prisma/client";
 import { reorderGoalsAction } from "@/lib/server/actions/goal/reorder-goals-action";
 import { GoalColumn } from "./goal/goal-column";
 
+import AddGoalDialog from "./goal/add-goal-dialog";
+
 export default function BoardColumns({
   goalsList,
   priorities,
@@ -77,19 +79,30 @@ export default function BoardColumns({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div
-        className={`grid grid-cols-1 min-[996px]:grid-cols-2 xl:grid-cols-3 gap-4 transition-opacity ${
-          isPending ? "opacity-60" : ""
-        }`}
-      >
-        {goals.map((goal) => (
-          <MemoizedDraggableGoal
-            key={goal.id}
-            goalInfo={goal}
-            priorities={priorities}
-          />
-        ))}
-      </div>
+      {goals.length > 0 ? (
+        <div
+          className={`grid grid-cols-1 min-[996px]:grid-cols-2 xl:grid-cols-3 gap-4 transition-opacity ${
+            isPending ? "opacity-60" : ""
+          }`}
+        >
+          {goals.map((goal) => (
+            <MemoizedDraggableGoal
+              key={goal.id}
+              goalInfo={goal}
+              priorities={priorities}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center text-center justify-center flex-1 gap-4 p-2 bg-gray-100 rounded-xl shadow-md ">
+          <div className="text-6xl">🎯</div>
+          <span className="text-2xl font-bold text-gray-800">No Goals Yet</span>
+          <p className="text-accent-foreground font-semibold">
+            Start adding goals to stay on track and achieve more!
+          </p>
+          <AddGoalDialog />
+        </div>
+      )}
 
       {activeGoal && (
         <DragOverlay adjustScale={false}>
@@ -108,7 +121,6 @@ export default function BoardColumns({
   );
 }
 
-// 🎯 نسخة محسّنة من DraggableGoal
 const DraggableGoal = ({
   goalInfo,
   priorities,
